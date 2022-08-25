@@ -6,9 +6,11 @@ public class Appliance {
     private Boolean isOn;
     private int currentPower;
 
-    public Appliance(String name, int imageId) {
+    public Appliance(String name, int imageId, Boolean isOn, int currentPower) {
         this.imageId = imageId;
         this.name = name;
+        this.isOn = isOn;
+        this.currentPower = currentPower;
     }
 
     public Boolean getOn() {
