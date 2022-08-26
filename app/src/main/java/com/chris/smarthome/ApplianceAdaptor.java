@@ -36,21 +36,6 @@ public class ApplianceAdaptor extends RecyclerView.Adapter<ApplianceAdaptor.View
             Appliance appliance = mApplianceList.get(position);
             byte operation = (byte) (appliance.getOn() ?  0x00:0x01);
             appliance.toggle_power();
-//            if (appliance.getOn()) {
-//                // is on initially
-//                appliance.setOn(false);
-////                holder.linearLayout.setBackgroundColor(0x7FFFFFFF);
-//                Toast.makeText(v.getContext(), appliance.getName() + " is turned off",
-//                        Toast.LENGTH_SHORT).show();
-//                operation = 0x00;
-//            } else {
-//                // is off initially
-//                appliance.setOn(true);
-////                holder.linearLayout.setBackgroundColor(0x3F3B86FC);
-//                Toast.makeText(v.getContext(), appliance.getName() + " is turned on",
-//                        Toast.LENGTH_SHORT).show();
-//                operation = 0x01;
-//            }
             Toast.makeText(v.getContext(),
                     appliance.getName() + " is turned " + (appliance.getOn()?"on":"off.")
                     , Toast.LENGTH_SHORT).show();
