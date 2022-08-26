@@ -180,13 +180,13 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void initAppliances() {
-        Appliance fridge = new Appliance("Refrigerator", R.drawable.fridge, false, 500);
+        Appliance fridge = new Appliance("Refrigerator", R.drawable.fridge, true, 500);
         applianceList.add(fridge);
-        Appliance washingMachine = new Appliance("Washing Machine", R.drawable.washing_machine, false, 500);
+        Appliance washingMachine = new Appliance("Washing Machine", R.drawable.washing_machine, true, 500);
         applianceList.add(washingMachine);
-        Appliance geyser = new Appliance("Geyser", R.drawable.geyser, false, 3000);
+        Appliance geyser = new Appliance("Geyser", R.drawable.geyser, true, 3000);
         applianceList.add(geyser);
-        Appliance lightBulb = new Appliance("Light Bulb", R.drawable.light_bulb, false, 25);
+        Appliance lightBulb = new Appliance("Light Bulb", R.drawable.light_bulb, true, 25);
         applianceList.add(lightBulb);
         Appliance airConditioner = new Appliance("Air Conditioner", R.drawable.air_conditioner, false, 3000);
         applianceList.add(airConditioner);

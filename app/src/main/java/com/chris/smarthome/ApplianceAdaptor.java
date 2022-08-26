@@ -34,22 +34,26 @@ public class ApplianceAdaptor extends RecyclerView.Adapter<ApplianceAdaptor.View
             // Power button is pushed!
             int position = holder.getAdapterPosition();
             Appliance appliance = mApplianceList.get(position);
-            byte operation;
-            if (appliance.getOn()) {
-                // is on initially
-                appliance.setOn(false);
-                holder.linearLayout.setBackgroundColor(0x7FFFFFFF);
-                Toast.makeText(v.getContext(), appliance.getName() + " is turned off",
-                        Toast.LENGTH_SHORT).show();
-                operation = 0x00;
-            } else {
-                // is off initially
-                appliance.setOn(true);
-                holder.linearLayout.setBackgroundColor(0x3F3B86FC);
-                Toast.makeText(v.getContext(), appliance.getName() + " is turned on",
-                        Toast.LENGTH_SHORT).show();
-                operation = 0x01;
-            }
+            byte operation = (byte) (appliance.getOn() ?  0x00:0x01);
+            appliance.toggle_power();
+//            if (appliance.getOn()) {
+//                // is on initially
+//                appliance.setOn(false);
+////                holder.linearLayout.setBackgroundColor(0x7FFFFFFF);
+//                Toast.makeText(v.getContext(), appliance.getName() + " is turned off",
+//                        Toast.LENGTH_SHORT).show();
+//                operation = 0x00;
+//            } else {
+//                // is off initially
+//                appliance.setOn(true);
+////                holder.linearLayout.setBackgroundColor(0x3F3B86FC);
+//                Toast.makeText(v.getContext(), appliance.getName() + " is turned on",
+//                        Toast.LENGTH_SHORT).show();
+//                operation = 0x01;
+//            }
+            Toast.makeText(v.getContext(),
+                    appliance.getName() + " is turned " + (appliance.getOn()?"on":"off.")
+                    , Toast.LENGTH_SHORT).show();
             if (Activity_Bluetooth_Connection.mThread != null)
                 Activity_Bluetooth_Connection.mThread.write(new byte[]
                         {0x03, 0x02, (byte) (position + 1), operation});
@@ -67,6 +71,8 @@ public class ApplianceAdaptor extends RecyclerView.Adapter<ApplianceAdaptor.View
         holder.applianceName.setText(appliance.getName());
         holder.on_or_off.setText(appliance.getOn() ? "On" : "Off");
         holder.current_power.setText(appliance.getCurrentPower() + "W");
+        holder.itemView.setBackgroundColor(appliance.getOn() ? 0x7FFFFFFF : 0x3F3B86FC);
+        holder.switch_power.setChecked(appliance.getOn());
     }
 
     @Override

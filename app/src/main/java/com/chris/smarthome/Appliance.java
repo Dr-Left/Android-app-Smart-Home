@@ -13,6 +13,10 @@ public class Appliance {
         this.currentPower = currentPower;
     }
 
+    public void toggle_power() {
+        this.isOn = !this.isOn;
+    }
+
     public Boolean getOn() {
         return isOn;
     }

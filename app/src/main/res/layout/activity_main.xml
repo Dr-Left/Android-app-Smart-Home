@@ -135,8 +135,11 @@
         android:id="@+id/button2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Press to connect the bluetooth"
-        android:textAllCaps="false"/>
+        android:text="Press to Connect to Smart Home Hub"
+        android:textAllCaps="false"
+        android:layout_marginTop="5dp"
+        android:background="#182C3C3C"
+        android:textColor="#FF555555"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
