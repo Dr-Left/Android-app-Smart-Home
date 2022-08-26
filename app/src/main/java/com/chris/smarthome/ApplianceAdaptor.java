@@ -45,6 +45,7 @@ public class ApplianceAdaptor extends RecyclerView.Adapter<ApplianceAdaptor.View
     @NonNull
     @Override
     public ApplianceAdaptor.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        // when the views are shown the first time
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.appliance_item, parent, false);
         ViewHolder holder = new ViewHolder(view);
@@ -53,22 +54,27 @@ public class ApplianceAdaptor extends RecyclerView.Adapter<ApplianceAdaptor.View
             int position = holder.getAdapterPosition();
             Appliance appliance = mApplianceList.get(position);
             if (appliance.getOn()) {
+                // is on initially
                 appliance.setOn(false);
                 holder.linearLayout.setBackgroundColor(0x7FBB86FC);
+                Toast.makeText(v.getContext(), appliance.getName() + " is turned off",
+                    Toast.LENGTH_SHORT).show();
             }
             else {
+                // is off initially
                 appliance.setOn(true);
                 holder.linearLayout.setBackgroundColor(0x7FFFFFFF);
+                Toast.makeText(v.getContext(), appliance.getName() + " is turned on",
+                        Toast.LENGTH_SHORT).show();
             }
             onBindViewHolder(holder, position);
-            Toast.makeText(v.getContext(), "You Clicked " + appliance.getName(),
-                    Toast.LENGTH_SHORT).show();
         });
         return holder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        // when the view is refreshed
         Appliance appliance = mApplianceList.get(position);
         holder.applianceImage.setImageResource(appliance.getImageId());
         holder.applianceName.setText(appliance.getName());

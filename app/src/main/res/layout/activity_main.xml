@@ -56,6 +56,7 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="大雨"
+                    android:textSize="12sp"
                     android:textColor="@color/white" />
             </LinearLayout>
 
