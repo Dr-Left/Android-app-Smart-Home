@@ -1,8 +1,9 @@
 package com.chris.smarthome;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.opengl.Visibility;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
@@ -14,6 +15,8 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
@@ -23,6 +26,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     public static Handler mHandler;
+    public static boolean blue_tooth_connected;
     private final List<Appliance> applianceList = new ArrayList<Appliance>();
     private ImageView imageView_chooseCity;
     private SharedPreferences pref;
@@ -36,14 +40,32 @@ public class MainActivity extends AppCompatActivity {
     private TextView textView_type;
     private ImageView imageView_weather;
     private Button button_connect_bluetooth;
-    public static boolean blue_tooth_connected;
-
+    private RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // TODO: locating service
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        String[] permissions = new String[]{
+                Manifest.permission.ACCESS_NETWORK_STATE,
+                Manifest.permission.BLUETOOTH_ADVERTISE,
+                Manifest.permission.BLUETOOTH_CONNECT,
+                Manifest.permission.BLUETOOTH_SCAN,
+                Manifest.permission.INTERNET,
+                Manifest.permission.BLUETOOTH,
+                Manifest.permission.BLUETOOTH_ADMIN,
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+        };
+        for (String permission : permissions) {
+            if (ContextCompat.checkSelfPermission(this, permission) !=
+                    PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, permissions, 1);
+                Log.d(TAG, "onCreate: PERMISSION FAILED");
+            }
+        }
 
         pref = PreferenceManager.getDefaultSharedPreferences(this);
         remember_city_code = pref.getString("city_code", "101010100");
@@ -64,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
         button_connect_bluetooth = (Button) findViewById(R.id.button2);
 
         initAppliances(); // init info of appliances
-        RecyclerView recyclerView = findViewById(R.id.recycler_view);
+        recyclerView = findViewById(R.id.recycler_view);
 //        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         StaggeredGridLayoutManager layoutManager = new
                 StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
@@ -72,13 +94,13 @@ public class MainActivity extends AppCompatActivity {
         ApplianceAdaptor adaptor = new ApplianceAdaptor(applianceList);
         recyclerView.setAdapter(adaptor);
 
-        if (!blue_tooth_connected) {
-            recyclerView.setVisibility(View.INVISIBLE);
-            button_connect_bluetooth.setVisibility(View.VISIBLE);
-        }else {
-            recyclerView.setVisibility(View.VISIBLE);
-            button_connect_bluetooth.setVisibility(View.GONE);
-        }
+//        if (!blue_tooth_connected) {
+//            recyclerView.setVisibility(View.INVISIBLE);
+//            button_connect_bluetooth.setVisibility(View.VISIBLE);
+//        } else {
+//            recyclerView.setVisibility(View.VISIBLE);
+//            button_connect_bluetooth.setVisibility(View.GONE);
+//        }
 
         button_connect_bluetooth.setOnClickListener((View view) -> {
             Intent intent = new Intent(MainActivity.this, Activity_Bluetooth_Connection.class);
@@ -91,12 +113,34 @@ public class MainActivity extends AppCompatActivity {
             startActivityForResult(intent, 1);
         });
 
-
+        // TODO: get message
         mHandler = new Handler() {
             public void handleMessage(android.os.Message msg) {
                 switch (msg.what) {
                     case QueryWeatherUtil.UPDATE_TODAY_WEATHER:
                         updateTodayWeather((TodayWeather) msg.obj);
+                        break;
+                    case Activity_Bluetooth_Connection.MESSAGE_READ:
+                        // get message from blue tooth!
+                        byte[] info = (byte[]) msg.obj;
+                        switch (info[0]) {
+                            case 0x01:
+                                // message
+                                for (int i = 0; i < info[1]; i++) {
+//                                    info[i + 2];//true/false
+                                }
+                                break;
+                            case 0x03:
+                                // switch
+                                break;
+                            case 0x02:
+                                // detect
+                                break;
+                            case 0x04:
+                                // control
+                                break;
+                        }
+                        updateAppliancesInfo();
                         break;
                     default:
                 }
@@ -118,7 +162,7 @@ public class MainActivity extends AppCompatActivity {
                     editor.putString("city_code", city_code);
                     editor.putString("city_name", city_name);
                     remember_city_name = city_name;
-                    Log.d(TAG, city_code);
+//                    Log.d(TAG, city_code);
                     editor.apply();
                     QueryWeatherUtil.queryWeatherCode(city_code);
                 }
@@ -126,24 +170,27 @@ public class MainActivity extends AppCompatActivity {
             case 2:
                 if (resultCode == RESULT_OK) {
                     // Activity_bluetooth_connection
-//                    data.get
+                    Log.d(TAG, "onActivityResult: CONNECTION SUCCESSFUL!");
+//                    Activity_Bluetooth_Connection.mThread.write("Hello!This is main activity!".getBytes());
+                    recyclerView.setVisibility(View.VISIBLE);
+                    button_connect_bluetooth.setVisibility(View.GONE);
                 }
         }
     }
 
 
     private void initAppliances() {
-        Appliance fridge = new Appliance("Refrigerator", R.drawable.fridge, true, 500);
+        Appliance fridge = new Appliance("Refrigerator", R.drawable.fridge, false, 500);
         applianceList.add(fridge);
-        Appliance washingMachine = new Appliance("Washing Machine", R.drawable.washing_machine, true, 500);
+        Appliance washingMachine = new Appliance("Washing Machine", R.drawable.washing_machine, false, 500);
         applianceList.add(washingMachine);
-        Appliance geyser = new Appliance("Geyser", R.drawable.geyser, true, 3000);
+        Appliance geyser = new Appliance("Geyser", R.drawable.geyser, false, 3000);
         applianceList.add(geyser);
-        Appliance lightBulb = new Appliance("Light Bulb", R.drawable.light_bulb, true, 25);
+        Appliance lightBulb = new Appliance("Light Bulb", R.drawable.light_bulb, false, 25);
         applianceList.add(lightBulb);
-        Appliance airConditioner = new Appliance("Air Conditioner", R.drawable.air_conditioner, true, 3000);
+        Appliance airConditioner = new Appliance("Air Conditioner", R.drawable.air_conditioner, false, 3000);
         applianceList.add(airConditioner);
-        Appliance television = new Appliance("Television", R.drawable.television, true, 250);
+        Appliance television = new Appliance("Television", R.drawable.television, false, 250);
         applianceList.add(television);
     }
 
@@ -217,5 +264,9 @@ public class MainActivity extends AppCompatActivity {
                 imageView_weather.setImageResource(R.drawable.biz_plugin_weather_zhongyu);
                 break;
         }
+    }
+
+    private void updateAppliancesInfo() {
+
     }
 }

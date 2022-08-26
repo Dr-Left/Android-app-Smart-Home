@@ -13,6 +13,7 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
@@ -42,12 +43,15 @@ import java.util.List;
 
 
 public class Activity_Bluetooth_Connection extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
-    public static final int MESSAGE_READ = 0;
+    public static final int MESSAGE_READ = 0xC0;
     public static final int DEBUG = 1;
     private static final String TAG = "Activity_Bluetooth_Connection";
-    private final int CONNECTED = 1000;
-    private final int DISCONNECTED = 1001;
-    public BluetoothSocket mSocket;
+    private static final int CONNECTED = 1000;
+    private static final int DISCONNECTED = 1001;
+    public static ComThread mThread = null;  // CAUTIOUS!
+    public static int state = DISCONNECTED;
+
+    public static BluetoothSocket mSocket;
     private BluetoothAdapter bluetoothAdapter;
     private BroadcastReceiver receiver;
     private ListView listView;
@@ -60,8 +64,6 @@ public class Activity_Bluetooth_Connection extends AppCompatActivity implements 
     private EditText editSend;
     private Button btnSend;
     private TextView textStatus;
-    private ComThread mThread = null;
-    private int state = DISCONNECTED;
     private Handler mHandler = new Handler() {
         public void handleMessage(@NonNull android.os.Message msg) {
             switch (msg.what) {
@@ -98,24 +100,6 @@ public class Activity_Bluetooth_Connection extends AppCompatActivity implements 
          The block below is to ensure every permission is granted,
          which is necessary in high APIs.
         */
-        String[] permissions = new String[]{
-                Manifest.permission.ACCESS_NETWORK_STATE,
-                Manifest.permission.BLUETOOTH_ADVERTISE,
-                Manifest.permission.BLUETOOTH_CONNECT,
-                Manifest.permission.BLUETOOTH_SCAN,
-                Manifest.permission.INTERNET,
-                Manifest.permission.BLUETOOTH,
-                Manifest.permission.BLUETOOTH_ADMIN,
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-        };
-        for (String permission : permissions) {
-            if (ContextCompat.checkSelfPermission(this, permission) !=
-                    PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, permissions, 1);
-                Log.d(TAG, "onCreate: PERMISSION FAILED");
-            }
-        }
 
 
         listView = (ListView) this.findViewById(R.id.listView);
@@ -190,22 +174,22 @@ public class Activity_Bluetooth_Connection extends AppCompatActivity implements 
         }
         return super.onOptionsItemSelected(item);
     }
-
-    @Override
-    protected void onDestroy() {
-        if (bluetoothAdapter != null && bluetoothAdapter.isDiscovering()) {
-            bluetoothAdapter.cancelDiscovery();
-        }
-        unregisterReceiver(receiver);
-        if (mSocket != null) {
-            try {
-                mSocket.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        super.onDestroy();
-    }
+//
+//    @Override
+//    protected void onDestroy() {
+//        if (bluetoothAdapter != null && bluetoothAdapter.isDiscovering()) {
+//            bluetoothAdapter.cancelDiscovery();
+//        }
+//        unregisterReceiver(receiver);
+//        if (mSocket != null) {
+//            try {
+//                mSocket.close();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//        super.onDestroy();
+//    }
 
     @Override
     public void onClick(View v) {
@@ -300,7 +284,6 @@ public class Activity_Bluetooth_Connection extends AppCompatActivity implements 
                         state = CONNECTED;
                         // return to the former page
                         Intent intent = new Intent();
-//                        intent.putExtra("connection_thread", mThread);
                         setResult(RESULT_OK, intent);
                         finish();
 
@@ -374,23 +357,25 @@ public class Activity_Bluetooth_Connection extends AppCompatActivity implements 
                              msg1.what = DEBUG;
                              msg1.obj = debuginfo;
                              mHandler.sendMessage(msg1);
+*/
+                            Message msg = new Message();
+                            msg.what = MESSAGE_READ;
+                            msg.obj = data;
+                            // how to transmit the length as well?
+                            // Kind of missing javascript...[weeping]
+                            MainActivity.mHandler.sendMessage(msg);
 
+//                            String mid = result;
 
-	                         Message msg = new Message();
-                             msg.what = MESSAGE_READ;
-                             msg.obj = result;
-                             mHandler.sendMessage(msg);
-	                         */
+//                            textData.post(new Runnable() {
+//                                public void run() {
+//                                    //textData.append("Receiv: "+mid);
+//                                    textData.setText("Receiv: " + mid);
+//                                    //String oldstr = textData.getText().toString();
+//                                    //textData.setText(oldstr+"\r\nReceiv: "+mid);
+//                                }
+//                            });
 
-                            final String mid = result;
-                            textData.post(new Runnable() {
-                                public void run() {
-                                    //textData.append("Receiv: "+mid);
-                                    textData.setText("Receiv: " + mid);
-                                    //String oldstr = textData.getText().toString();
-                                    //textData.setText(oldstr+"\r\nReceiv: "+mid);
-                                }
-                            });
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }

@@ -10,7 +10,7 @@
 
     <LinearLayout
         android:layout_width="250dp"
-        android:layout_height="120dp"
+        android:layout_height="130dp"
         android:gravity="start"
         android:orientation="vertical"
         android:background="#0C000000"
@@ -67,7 +67,9 @@
             android:layout_width="match_parent"
             android:layout_height="20dp"
             android:orientation="horizontal"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="3dp"
+            android:layout_gravity="center_vertical"
             >
 
             <ImageView
@@ -85,8 +87,8 @@
                 android:layout_weight="4"
                 android:gravity="center"
                 android:text="镇江市"
-                android:padding="3dp"
-                android:textSize="12sp"
+                android:padding="2dp"
+                android:textSize="11sp"
                 android:textColor="@color/white" />
 
             <ImageView
@@ -104,8 +106,8 @@
                 android:layout_weight="4"
                 android:gravity="center"
                 android:text="97%"
-                android:padding="3dp"
-                android:textSize="12sp"
+                android:padding="2dp"
+                android:textSize="11sp"
                 android:textColor="@color/white" />
 
             <ImageView
@@ -123,8 +125,8 @@
                 android:layout_weight="2"
                 android:gravity="center"
                 android:text="优"
-                android:padding="3dp"
-                android:textSize="12sp"
+                android:padding="2dp"
+                android:textSize="11sp"
                 android:textColor="@color/white" />
         </LinearLayout>
     </LinearLayout>

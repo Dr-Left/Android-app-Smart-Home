@@ -41,7 +41,7 @@ public class seekForCity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-
+                queryDataBase_then_setText(editText.getText().toString());
             }
         });
 

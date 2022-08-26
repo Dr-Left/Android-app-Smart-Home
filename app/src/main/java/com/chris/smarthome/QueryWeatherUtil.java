@@ -179,7 +179,8 @@ public class QueryWeatherUtil {
                         msg.obj = todayWeather;
                         MainActivity.mHandler.sendMessage(msg);
 
-                	   /*city_name_Tv.setText(todayWeather.getCity()+"天气");
+                	   /*
+                	   city_name_Tv.setText(todayWeather.getCity()+"天气");
                        cityTv.setText(todayWeather.getCity());
                        timeTv.setText(todayWeather.getUpdatetime()+ "发布");
                 	   */

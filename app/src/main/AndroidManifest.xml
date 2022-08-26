@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.chris.smarthome">
@@ -22,11 +23,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.SmartHome"
+        android:usesCleartextTraffic="true"
         tools:targetApi="29">
-        <service
-            android:name=".BlueToothService"
-            android:enabled="true"
-            android:exported="true"></service>
 
         <activity
             android:name=".Activity_Bluetooth_Connection"

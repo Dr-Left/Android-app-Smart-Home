@@ -7,7 +7,7 @@
     android:background="#7FFFFFFF"
     android:gravity="center"
     android:orientation="vertical"
-    android:padding="15dp">
+    android:padding="5dp">
 
     <Button
         android:id="@+id/button"
@@ -15,7 +15,15 @@
         android:layout_height="20dp"
         android:layout_gravity="left"
         android:layout_marginBottom="10dp"
-        android:background="@drawable/power" />
+        android:background="@drawable/power"
+        android:visibility="gone" />
+
+    <Switch
+        android:id="@+id/switch1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:width="50dp"
+        android:textSize="5sp"/>
 
     <ImageView
         android:id="@+id/appliance_image"
@@ -36,14 +44,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="On"
-        android:textSize="10sp"/>
+        android:textSize="10sp" />
 
     <TextView
         android:id="@+id/current_power"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="1000W"
-        android:textSize="10sp"/>
+        android:textSize="10sp" />
 
 
 </LinearLayout>
