@@ -23,6 +23,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SmartHome"
         tools:targetApi="29">
+        <service
+            android:name=".BlueToothService"
+            android:enabled="true"
+            android:exported="true"></service>
+
         <activity
             android:name=".Activity_Bluetooth_Connection"
             android:exported="false" />
@@ -37,7 +42,7 @@
         </activity>
         <activity
             android:name=".seekForCity"
-            android:exported="false"></activity>
+            android:exported="false" />
     </application>
 
 </manifest>

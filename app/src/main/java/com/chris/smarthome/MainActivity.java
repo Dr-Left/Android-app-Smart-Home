@@ -2,11 +2,13 @@ package com.chris.smarthome;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.opengl.Visibility;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -33,6 +35,8 @@ public class MainActivity extends AppCompatActivity {
     private TextView textView_quality;
     private TextView textView_type;
     private ImageView imageView_weather;
+    private Button button_connect_bluetooth;
+    public static boolean blue_tooth_connected;
 
 
     @Override
@@ -44,8 +48,8 @@ public class MainActivity extends AppCompatActivity {
         pref = PreferenceManager.getDefaultSharedPreferences(this);
         remember_city_code = pref.getString("city_code", "101010100");
         remember_city_name = pref.getString("city_name", "北京");
-        Log.d(TAG, remember_city_code);
-
+//        Log.d(TAG, remember_city_code);
+        blue_tooth_connected = false;
 
         QueryWeatherUtil.queryWeatherCode(remember_city_code);
 
@@ -57,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
         textView_current_wendu = (TextView) findViewById(R.id.textView1);
         imageView_chooseCity = (ImageView) findViewById(R.id.imageView2);
         imageView_weather = (ImageView) findViewById(R.id.imageView);
+        button_connect_bluetooth = (Button) findViewById(R.id.button2);
 
         initAppliances(); // init info of appliances
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
@@ -66,6 +71,19 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
         ApplianceAdaptor adaptor = new ApplianceAdaptor(applianceList);
         recyclerView.setAdapter(adaptor);
+
+        if (!blue_tooth_connected) {
+            recyclerView.setVisibility(View.INVISIBLE);
+            button_connect_bluetooth.setVisibility(View.VISIBLE);
+        }else {
+            recyclerView.setVisibility(View.VISIBLE);
+            button_connect_bluetooth.setVisibility(View.GONE);
+        }
+
+        button_connect_bluetooth.setOnClickListener((View view) -> {
+            Intent intent = new Intent(MainActivity.this, Activity_Bluetooth_Connection.class);
+            startActivityForResult(intent, 2);
+        });
 
         imageView_chooseCity.setOnClickListener((View view) -> {
 //            Toast.makeText(MainActivity.this, "123", Toast.LENGTH_SHORT).show();
@@ -92,6 +110,7 @@ public class MainActivity extends AppCompatActivity {
         switch (requestCode) {
             case 1:
                 if (resultCode == RESULT_OK) {
+                    // city already chosen
                     String city_name = data.getStringExtra("city_name");
                     String city_code = data.getStringExtra("city_code");
 //                    Toast.makeText(this, returnedData, Toast.LENGTH_SHORT).show();
@@ -102,6 +121,12 @@ public class MainActivity extends AppCompatActivity {
                     Log.d(TAG, city_code);
                     editor.apply();
                     QueryWeatherUtil.queryWeatherCode(city_code);
+                }
+                break;
+            case 2:
+                if (resultCode == RESULT_OK) {
+                    // Activity_bluetooth_connection
+//                    data.get
                 }
         }
     }

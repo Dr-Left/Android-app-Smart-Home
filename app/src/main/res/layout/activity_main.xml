@@ -129,6 +129,13 @@
         </LinearLayout>
     </LinearLayout>
 
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Press to connect the bluetooth"
+        android:textAllCaps="false"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"

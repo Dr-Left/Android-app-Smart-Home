@@ -14,6 +14,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -41,9 +42,9 @@ import java.util.List;
 
 
 public class Activity_Bluetooth_Connection extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
-
     public static final int MESSAGE_READ = 0;
     public static final int DEBUG = 1;
+    private static final String TAG = "Activity_Bluetooth_Connection";
     private final int CONNECTED = 1000;
     private final int DISCONNECTED = 1001;
     public BluetoothSocket mSocket;
@@ -93,19 +94,26 @@ public class Activity_Bluetooth_Connection extends AppCompatActivity implements 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bluetooth_connection);
 
-
+        /*
+         The block below is to ensure every permission is granted,
+         which is necessary in high APIs.
+        */
         String[] permissions = new String[]{
-                Manifest.permission.CALL_PHONE,
-                Manifest.permission.SEND_SMS,
-                Manifest.permission.CAMERA,
-                Manifest.permission.RECORD_AUDIO,
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.RECORD_AUDIO
+                Manifest.permission.ACCESS_NETWORK_STATE,
+                Manifest.permission.BLUETOOTH_ADVERTISE,
+                Manifest.permission.BLUETOOTH_CONNECT,
+                Manifest.permission.BLUETOOTH_SCAN,
+                Manifest.permission.INTERNET,
+                Manifest.permission.BLUETOOTH,
+                Manifest.permission.BLUETOOTH_ADMIN,
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION,
         };
-        for (String permission:permissions) {
+        for (String permission : permissions) {
             if (ContextCompat.checkSelfPermission(this, permission) !=
                     PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, permissions ,1);
+                ActivityCompat.requestPermissions(this, permissions, 1);
+                Log.d(TAG, "onCreate: PERMISSION FAILED");
             }
         }
 
@@ -274,11 +282,10 @@ public class Activity_Bluetooth_Connection extends AppCompatActivity implements 
             	mSocket = device.createRfcommSocketToServiceRecord(uuid);
             	*/
 
-
                 Method clientMethod = device.getClass().getMethod("createRfcommSocket", new Class[]{int.class});
                 mSocket = (BluetoothSocket) clientMethod.invoke(device, 1);
+                // Even the Harmony(TM) system should use 1!
                 // 1 连接单片机 ,  2和3 连接手机
-
 
                 try {
                     mSocket.connect();//连接
@@ -291,6 +298,12 @@ public class Activity_Bluetooth_Connection extends AppCompatActivity implements 
                         mThread = new ComThread(mSocket);
                         mThread.start();//另开一个线程，与蓝牙设备进行通信
                         state = CONNECTED;
+                        // return to the former page
+                        Intent intent = new Intent();
+//                        intent.putExtra("connection_thread", mThread);
+                        setResult(RESULT_OK, intent);
+                        finish();
+
                     } else {
                         textStatus.setText("连接失败");
                         Toast.makeText(getApplicationContext(), "蓝牙连接失败", Toast.LENGTH_SHORT).show();
@@ -300,7 +313,6 @@ public class Activity_Bluetooth_Connection extends AppCompatActivity implements 
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
             } catch (NoSuchMethodException e) {
                 e.printStackTrace();
             } catch (IllegalAccessException e) {
@@ -343,10 +355,8 @@ public class Activity_Bluetooth_Connection extends AppCompatActivity implements 
         public void run() {
             try {
                 inputStream = s.getInputStream();
-
                 int len = 0;
                 String result = "";
-
                 exitflag = false;
                 while (len != -1) {
                     if (inputStream.available() <= 0) {
@@ -358,7 +368,6 @@ public class Activity_Bluetooth_Connection extends AppCompatActivity implements 
                             byte[] data = new byte[1024];
                             len = inputStream.read(data);
                             result = URLDecoder.decode(new String(data, "utf-8"));
-
 
 	                         /*String debuginfo="len = "+len+" result = "+result;
 	                         Message msg1 = new Message();
@@ -393,7 +402,6 @@ public class Activity_Bluetooth_Connection extends AppCompatActivity implements 
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (InterruptedException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         }

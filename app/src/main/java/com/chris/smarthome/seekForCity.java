@@ -27,7 +27,7 @@ public class seekForCity extends AppCompatActivity {
         setContentView(R.layout.layout_seek_for_city);
 
         editText = findViewById(R.id.editText);
-
+        queryDataBase_then_setText(editText.getText().toString());
         editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -41,7 +41,7 @@ public class seekForCity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                queryDataBase_then_setText(editText.getText().toString());
+
             }
         });
 
