@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
             startActivityForResult(intent, 1);
         });
 
-        // TODO: get message
+        // get message
         mHandler = new Handler() {
             public void handleMessage(android.os.Message msg) {
                 switch (msg.what) {

@@ -50,9 +50,9 @@ public class ApplianceAdaptor extends RecyclerView.Adapter<ApplianceAdaptor.View
                         Toast.LENGTH_SHORT).show();
                 operation = 0x01;
             }
-            if (Activity_Bluetooth_Connection.mThread!=null)
+            if (Activity_Bluetooth_Connection.mThread != null)
                 Activity_Bluetooth_Connection.mThread.write(new byte[]
-                        {0x03, 0x02, (byte) (position+1), operation});
+                        {0x03, 0x02, (byte) (position + 1), operation});
 
             onBindViewHolder(holder, position);
         });
