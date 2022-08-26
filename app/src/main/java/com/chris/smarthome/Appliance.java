@@ -1,16 +1,20 @@
 package com.chris.smarthome;
 
-public class Appliance {
+import java.io.Serializable;
+
+public class Appliance implements Serializable {
     private int imageId;
     private String name;
     private Boolean isOn;
     private int currentPower;
+    private int maxPower;
 
-    public Appliance(String name, int imageId, Boolean isOn, int currentPower) {
+    public Appliance(String name, int imageId, Boolean isOn, int currentPower, int maxPower) {
         this.imageId = imageId;
         this.name = name;
         this.isOn = isOn;
         this.currentPower = currentPower;
+        this.maxPower = maxPower;
     }
 
     public void toggle_power() {
@@ -48,5 +52,13 @@ public class Appliance {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getMaxPower() {
+        return maxPower;
+    }
+
+    public void setMaxPower(int maxPower) {
+        this.maxPower = maxPower;
     }
 }

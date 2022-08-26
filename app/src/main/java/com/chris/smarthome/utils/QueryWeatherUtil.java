@@ -1,9 +1,10 @@
-package com.chris.smarthome;
+package com.chris.smarthome.utils;
 
 import android.os.Message;
 import android.util.Log;
 
-import org.json.JSONArray;
+import com.chris.smarthome.MainActivity;
+
 import org.json.JSONObject;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;

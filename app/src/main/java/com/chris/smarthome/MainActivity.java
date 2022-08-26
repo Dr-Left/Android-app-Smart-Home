@@ -1,6 +1,7 @@
 package com.chris.smarthome;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,6 +21,9 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
+
+import com.chris.smarthome.utils.QueryWeatherUtil;
+import com.chris.smarthome.utils.TodayWeather;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,12 +46,15 @@ public class MainActivity extends AppCompatActivity {
     private ImageView imageView_weather;
     private Button button_connect_bluetooth;
     private RecyclerView recyclerView;
+    public static Activity mainActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // TODO: locating service
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mainActivity = (Activity) this;
 
         String[] permissions = new String[]{
                 Manifest.permission.ACCESS_NETWORK_STATE,
@@ -175,22 +183,41 @@ public class MainActivity extends AppCompatActivity {
                     recyclerView.setVisibility(View.VISIBLE);
                     button_connect_bluetooth.setVisibility(View.GONE);
                 }
+                break;
+            case 3:
+                if (resultCode == RESULT_OK) {
+                    int position = data.getIntExtra("position", -1);
+                    if (data.getBooleanExtra("isRemoved", false)) {
+                        Toast.makeText(mainActivity, applianceList.get(position).getName() +
+                                " has been removed!"
+                                , Toast.LENGTH_SHORT).show();
+                        applianceList.remove(position);
+                        recyclerView.removeViewAt(position);
+                    }
+                    else {
+                        // OK
+                        Appliance appliance =  applianceList.get(position);
+                        appliance.setCurrentPower(data.getIntExtra("power", -1));
+                    }
+                }
+                recyclerView.getAdapter().notifyDataSetChanged();
+                break;
         }
     }
 
 
     private void initAppliances() {
-        Appliance fridge = new Appliance("Refrigerator", R.drawable.fridge, true, 500);
+        Appliance fridge = new Appliance("Refrigerator", R.drawable.fridge, true, 200, 0);
         applianceList.add(fridge);
-        Appliance washingMachine = new Appliance("Washing Machine", R.drawable.washing_machine, true, 500);
+        Appliance washingMachine = new Appliance("Washing Machine", R.drawable.washing_machine, true, 300, 0);
         applianceList.add(washingMachine);
-        Appliance geyser = new Appliance("Geyser", R.drawable.geyser, true, 3000);
+        Appliance geyser = new Appliance("Geyser", R.drawable.geyser, true, 3000, 5000);
         applianceList.add(geyser);
-        Appliance lightBulb = new Appliance("Light Bulb", R.drawable.light_bulb, true, 25);
+        Appliance lightBulb = new Appliance("Light Bulb", R.drawable.light_bulb, true, 25, 100);
         applianceList.add(lightBulb);
-        Appliance airConditioner = new Appliance("Air Conditioner", R.drawable.air_conditioner, false, 3000);
+        Appliance airConditioner = new Appliance("Air Conditioner", R.drawable.air_conditioner, false, 2000, 3000);
         applianceList.add(airConditioner);
-        Appliance television = new Appliance("Television", R.drawable.television, false, 250);
+        Appliance television = new Appliance("Television", R.drawable.television, false, 110, 0);
         applianceList.add(television);
     }
 

@@ -1,4 +1,4 @@
-package com.chris.smarthome;
+package com.chris.smarthome.utils;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

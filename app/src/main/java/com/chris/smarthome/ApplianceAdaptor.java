@@ -1,5 +1,10 @@
 package com.chris.smarthome;
 
+import static androidx.core.app.ActivityCompat.startActivityForResult;
+import static androidx.core.content.ContextCompat.startActivity;
+
+import android.content.Intent;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,8 +35,9 @@ public class ApplianceAdaptor extends RecyclerView.Adapter<ApplianceAdaptor.View
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.appliance_item, parent, false);
         ViewHolder holder = new ViewHolder(view);
+
         holder.switch_power.setOnClickListener((View v) -> {
-            // Power button is pushed!
+            // Power button is pressed!
             int position = holder.getAdapterPosition();
             Appliance appliance = mApplianceList.get(position);
             byte operation = (byte) (appliance.getOn() ?  0x00:0x01);
@@ -44,6 +50,17 @@ public class ApplianceAdaptor extends RecyclerView.Adapter<ApplianceAdaptor.View
                         {0x03, 0x02, (byte) (position + 1), operation});
 
             onBindViewHolder(holder, position);
+        });
+        view.setOnClickListener((View v)-> {
+            // The whole appliance card is pressed!
+            int position = holder.getAdapterPosition();
+            Appliance appliance = mApplianceList.get(position);
+            if (appliance.getOn()) {
+                Intent intent = new Intent(v.getContext(), Dialog_Appliance_Setting.class);
+                intent.putExtra("position", position);
+                intent.putExtra("appliance", appliance);
+                startActivityForResult(MainActivity.mainActivity, intent, 3, null);
+            }
         });
         return holder;
     }

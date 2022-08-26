@@ -4,7 +4,8 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/myCode/Android/SmartHome/app/src/main/res/layout/activity_bluetooth_connection.xml" value="0.16983695652173914" />
-        <entry key="..\:/myCode/Android/SmartHome/app/src/main/res/layout/activity_main.xml" value="0.2222222222222222" />
+        <entry key="..\:/myCode/Android/SmartHome/app/src/main/res/layout/activity_dialog_appliance_setting.xml" value="0.1" />
+        <entry key="..\:/myCode/Android/SmartHome/app/src/main/res/layout/activity_main.xml" value="0.2977777777777778" />
         <entry key="..\:/myCode/Android/SmartHome/app/src/main/res/layout/appliance_item.xml" value="0.2977777777777778" />
         <entry key="..\:/myCode/Android/SmartHome/app/src/main/res/layout/layout_seek_for_city.xml" value="0.13069908814589665" />
         <entry key="..\:/myCode/Android/SmartHome/app/src/main/res/menu/main.xml" value="0.19479166666666667" />

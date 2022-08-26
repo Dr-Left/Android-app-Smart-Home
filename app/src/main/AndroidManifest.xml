@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.chris.smarthome">
@@ -25,7 +24,10 @@
         android:theme="@style/Theme.SmartHome"
         android:usesCleartextTraffic="true"
         tools:targetApi="29">
-
+        <activity
+            android:name=".Dialog_Appliance_Setting"
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.Light.Dialog" />
         <activity
             android:name=".Activity_Bluetooth_Connection"
             android:exported="false" />

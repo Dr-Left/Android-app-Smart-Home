@@ -14,6 +14,9 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.chris.smarthome.utils.DatabaseUtil;
+import com.chris.smarthome.utils.MyDatabaseHelper;
+
 
 public class seekForCity extends AppCompatActivity {
 
