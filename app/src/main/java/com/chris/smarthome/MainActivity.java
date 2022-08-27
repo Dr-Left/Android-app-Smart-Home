@@ -212,8 +212,8 @@ public class MainActivity extends AppCompatActivity {
                         }
                         else
                             Activity_Bluetooth_Connection.mThread.write(
-                                    new byte[]{0x04, 0x02, (byte)(position+1), (byte)(power/10)}
-                            );
+                                    new byte[]{0x04, 0x02, (byte)(position+1),
+                                            (byte)(power*100/appliance.getMaxPower())});
                     }
                 }
                 recyclerView.getAdapter().notifyDataSetChanged();

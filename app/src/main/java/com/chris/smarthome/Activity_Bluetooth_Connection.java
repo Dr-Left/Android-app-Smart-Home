@@ -277,8 +277,8 @@ public class Activity_Bluetooth_Connection extends AppCompatActivity implements 
                     if (mSocket.isConnected()) {
                         textStatus.setText("连接成功");
                         Toast.makeText(getApplicationContext(), "蓝牙连接成功", Toast.LENGTH_SHORT).show();
-                        listView.setVisibility(View.GONE);
-                        textData.setVisibility(View.VISIBLE);
+//                        listView.setVisibility(View.GONE);
+//                        textData.setVisibility(View.VISIBLE);
                         mThread = new ComThread(mSocket);
                         mThread.start();//另开一个线程，与蓝牙设备进行通信
                         state = CONNECTED;
