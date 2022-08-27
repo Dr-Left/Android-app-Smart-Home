@@ -207,9 +207,13 @@ public class MainActivity extends AppCompatActivity {
                         Appliance appliance = applianceList.get(position);
                         int power = data.getIntExtra("power", -1);
                         appliance.setCurrentPower(power);
-                        Activity_Bluetooth_Connection.mThread.write(
-                                new byte[]{0x04, 0x02, (byte)(position+1), (byte)(power/10)}
-                        );
+                        if (Activity_Bluetooth_Connection.mThread == null) {
+                            Toast.makeText(mainActivity, "Please connect the bluetooth first!", Toast.LENGTH_SHORT).show();
+                        }
+                        else
+                            Activity_Bluetooth_Connection.mThread.write(
+                                    new byte[]{0x04, 0x02, (byte)(position+1), (byte)(power/10)}
+                            );
                     }
                 }
                 recyclerView.getAdapter().notifyDataSetChanged();
