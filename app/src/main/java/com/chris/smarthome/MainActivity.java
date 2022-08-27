@@ -24,6 +24,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.chris.smarthome.utils.QueryWeatherUtil;
 import com.chris.smarthome.utils.TodayWeather;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView textView_type;
     private ImageView imageView_weather;
     private Button button_connect_bluetooth;
+    private FloatingActionButton button_add;
     private RecyclerView recyclerView;
     public static Activity mainActivity;
 
@@ -92,6 +94,7 @@ public class MainActivity extends AppCompatActivity {
         imageView_chooseCity = (ImageView) findViewById(R.id.imageView2);
         imageView_weather = (ImageView) findViewById(R.id.imageView);
         button_connect_bluetooth = (Button) findViewById(R.id.button2);
+        button_add = (FloatingActionButton) findViewById(R.id.floatingActionButton);
 
         initAppliances(); // init info of appliances
         recyclerView = findViewById(R.id.recycler_view);
@@ -119,6 +122,11 @@ public class MainActivity extends AppCompatActivity {
 //            Toast.makeText(MainActivity.this, "123", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(MainActivity.this, seekForCity.class);
             startActivityForResult(intent, 1);
+        });
+
+        button_add.setOnClickListener((View v)-> {
+            Intent intent = new Intent(MainActivity.this, Add_appliance.class);
+            startActivityForResult(intent, 4);
         });
 
         // get message

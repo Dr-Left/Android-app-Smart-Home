@@ -25,6 +25,10 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="29">
         <activity
+            android:name=".Add_appliance"
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.Light.Dialog" />
+        <activity
             android:name=".Dialog_Appliance_Setting"
             android:exported="false"
             android:theme="@style/Theme.AppCompat.Light.Dialog" />

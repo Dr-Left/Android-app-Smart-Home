@@ -24,7 +24,7 @@
             android:inputType="text"
             android:text=""
             android:textColor="@color/purple_700"
-            android:textColorHint="@color/purple_200"/>
+            android:textColorHint="@color/purple_200" />
     </LinearLayout>
 
     <ListView
@@ -33,5 +33,5 @@
         android:layout_height="match_parent"
         android:layout_marginTop="40dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout3"></ListView>
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
 </androidx.constraintlayout.widget.ConstraintLayout>

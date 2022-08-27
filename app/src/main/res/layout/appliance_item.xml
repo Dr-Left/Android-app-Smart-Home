@@ -8,7 +8,9 @@
     android:background="#7FFFFFFF"
     android:gravity="center"
     android:orientation="vertical"
-    android:padding="5dp">
+    android:padding="5dp"
+    android:clickable="true"
+    android:focusable="true">
 
     <Button
         android:id="@+id/button"

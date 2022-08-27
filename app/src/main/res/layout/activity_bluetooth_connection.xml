@@ -16,7 +16,6 @@
         android:id="@+id/listView"
         android:layout_width="match_parent"
         android:layout_height="511dp"
-        android:background="#66DDCFDD"
         android:padding="10dp">
 
     </ListView>
@@ -54,7 +53,7 @@
     <LinearLayout
         android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
-        android:layout_height="30dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:orientation="horizontal">
 
@@ -65,7 +64,6 @@
             android:layout_marginRight="20dp"
             android:layout_toLeftOf="@+id/btnSearch"
             android:layout_weight="0.5"
-            android:background="#CCBB86FC"
             android:text="打开蓝牙" />
 
         <Button
@@ -73,7 +71,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
-            android:background="#CCBB86FC"
             android:text="搜索蓝牙" />
 
     </LinearLayout>
