@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     public static Handler mHandler;
     public static boolean blue_tooth_connected;
+    public static Activity mainActivity;
     private final List<Appliance> applianceList = new ArrayList<Appliance>();
     private ImageView imageView_chooseCity;
     private SharedPreferences pref;
@@ -48,7 +49,6 @@ public class MainActivity extends AppCompatActivity {
     private Button button_connect_bluetooth;
     private FloatingActionButton button_add;
     private RecyclerView recyclerView;
-    public static Activity mainActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,6 +105,7 @@ public class MainActivity extends AppCompatActivity {
         ApplianceAdaptor adaptor = new ApplianceAdaptor(applianceList);
         recyclerView.setAdapter(adaptor);
 
+//        recyclerView.setEnabled(false);
 //        if (!blue_tooth_connected) {
 //            recyclerView.setVisibility(View.INVISIBLE);
 //            button_connect_bluetooth.setVisibility(View.VISIBLE);
@@ -124,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
             startActivityForResult(intent, 1);
         });
 
-        button_add.setOnClickListener((View v)-> {
+        button_add.setOnClickListener((View v) -> {
             Intent intent = new Intent(MainActivity.this, Add_appliance.class);
             startActivityForResult(intent, 4);
         });
@@ -188,8 +189,8 @@ public class MainActivity extends AppCompatActivity {
                     // Activity_bluetooth_connection
                     Log.d(TAG, "onActivityResult: CONNECTION SUCCESSFUL!");
 //                    Activity_Bluetooth_Connection.mThread.write("Hello!This is main activity!".getBytes());
-                    recyclerView.setVisibility(View.VISIBLE);
                     button_connect_bluetooth.setVisibility(View.GONE);
+                    recyclerView.setEnabled(true);
                 }
                 break;
             case 3:
@@ -197,19 +198,30 @@ public class MainActivity extends AppCompatActivity {
                     int position = data.getIntExtra("position", -1);
                     if (data.getBooleanExtra("isRemoved", false)) {
                         Toast.makeText(mainActivity, applianceList.get(position).getName() +
-                                " has been removed!"
+                                        " has been removed!"
                                 , Toast.LENGTH_SHORT).show();
                         applianceList.remove(position);
                         recyclerView.removeViewAt(position);
-                    }
-                    else {
+                    } else {
                         // OK
-                        Appliance appliance =  applianceList.get(position);
-                        appliance.setCurrentPower(data.getIntExtra("power", -1));
+                        Appliance appliance = applianceList.get(position);
+                        int power = data.getIntExtra("power", -1);
+                        appliance.setCurrentPower(power);
+                        Activity_Bluetooth_Connection.mThread.write(
+                                new byte[]{0x04, 0x02, (byte)(position+1), (byte)(power/10)}
+                        );
                     }
                 }
                 recyclerView.getAdapter().notifyDataSetChanged();
                 break;
+            case 4:
+                if (resultCode == RESULT_OK) {
+                    String name = data.getStringExtra("name");
+                    int power = data.getIntExtra("power", 0);
+                    int maxPower = data.getIntExtra("max_power", 0);
+                    applianceList.add(new Appliance(name, 0, false, power, maxPower));
+                    recyclerView.getAdapter().notifyDataSetChanged();
+                }
         }
     }
 
